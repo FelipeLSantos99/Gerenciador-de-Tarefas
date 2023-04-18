@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+
+    <style>
+        body {
+            background-color: #252525;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        a:hover {
+            background-color: #555;
+        }
+
+    </style>
+
+    <script>
+        function confirmDelete() {
+            return confirm("Tem certeza que deseja deletar essa tarefa?");
+        }
+
+    </script>
+</head>
+<body>
+{% block content %}
+<h1>Tarefas</h1>
+
+<ul>
+    {% for tarefa in tarefas %}
+    <li>
+        <strong>{{ tarefa.titulo }}</strong><br>
+        Descrição: {{ tarefa.descricao }}<br>
+        Criada por: {{ tarefa.usuario.username }}
+
+        <form method="POST" action="{% url 'editar_tarefa' tarefa.id %}">
+            {% csrf_token %}
+            <button type="submit">Editar</button>
+        </form>
+
+        <form method="POST" action="{% url 'deletar_tarefa' tarefa.id %}" onsubmit="return confirmDelete()">
+            {% csrf_token %}
+            <button type="submit">Deletar</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'criar_tarefa' %}">Criar nova tarefa</a>
+<a href="{% url 'criar_usuario' %}">Criar novo usuário</a>
+{% endblock %}
+</body>
+</html>
